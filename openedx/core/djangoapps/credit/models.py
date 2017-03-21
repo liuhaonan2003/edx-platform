@@ -465,9 +465,11 @@ class CreditRequirementStatus(TimeStampedModel):
             defaults={"reason": reason, "status": status}
         )
         if not created:
-            requirement_status.status = status
-            requirement_status.reason = reason if reason else {}
-            requirement_status.save()
+            # do not update status to `failed` if user has `satisfied` the requirements
+            if not (status == 'failed' and requirement_status.status == 'satisfied'):
+                requirement_status.status = status
+                requirement_status.reason = reason if reason else {}
+                requirement_status.save()
 
     @classmethod
     @transaction.atomic
