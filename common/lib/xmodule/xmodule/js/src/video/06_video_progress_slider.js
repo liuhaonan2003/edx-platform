@@ -45,7 +45,8 @@ function() {
             updatePlayTime: updatePlayTime,
             updateStartEndTimeRegion: updateStartEndTimeRegion,
             notifyThroughHandleEnd: notifyThroughHandleEnd,
-            getTimeDescription: getTimeDescription
+            getTimeDescription: getTimeDescription,
+            focusSlider: focusSlider
         };
 
         state.bindTo(methodsDict, state.videoProgressSlider, state);
@@ -327,6 +328,10 @@ function() {
         }
 
         return i18n(seconds, 'second');
+    }
+
+    function focusSlider(params) {
+        this.videoProgressSlider.handle.trigger('focus');
     }
 });
 }(RequireJS.requirejs, RequireJS.require, RequireJS.define));
