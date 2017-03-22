@@ -91,7 +91,8 @@ function() {
             'aria-valuemin': '0',
             'aria-valuenow': state.videoPlayer.currentTime,
             'tabindex': '0',
-            'aria-label': gettext('Video position')
+            'aria-label': gettext('Video position'),
+            'aria-describedby': 'slider-text-' + state.id
         });
     }
 
@@ -109,7 +110,11 @@ function() {
 
     function buildSlider() {
         this.videoProgressSlider.el
-            .append('<div class="ui-slider-handle progress-handle"></div>');
+            .append('<div class="ui-slider-handle progress-handle">' +
+                        '<div class="sr" id="slider-text-' + this.id + '">' +
+                            'Press space to toggle playback' +
+                        '</div>' +
+                    '</div>');
 
         this.videoProgressSlider.slider = this.videoProgressSlider.el
             .slider({
