@@ -70,6 +70,7 @@ function() {
         state.el.find('.video-controls').prepend(state.videoProgressSlider.el);
         state.videoProgressSlider.buildSlider();
         _buildHandle(state);
+        _bindHandlers(state);
     }
 
     function _buildHandle(state) {
@@ -92,7 +93,10 @@ function() {
             'tabindex': '0',
             'aria-label': gettext('Video position')
         });
+    }
 
+    function _bindHandlers(state) {
+        state.videoProgressSlider.handle.on('keypress', sliderToggle.bind(state));
         state.el.on('destroy', state.videoProgressSlider.destroy);
     }
 
@@ -331,7 +335,17 @@ function() {
     }
 
     function focusSlider(params) {
+        this.videoProgressSlider.handle.attr(
+            'aria-valuetext', getTimeDescription(this.videoPlayer.currentTime)
+        );
         this.videoProgressSlider.handle.trigger('focus');
+    }
+
+    function sliderToggle(e) {
+        if (e.which === 32) {
+            e.preventDefault();
+            this.videoCommands.execute('togglePlayback');
+        }
     }
 });
 }(RequireJS.requirejs, RequireJS.require, RequireJS.define));
