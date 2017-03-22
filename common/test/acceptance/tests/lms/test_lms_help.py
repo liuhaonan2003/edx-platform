@@ -125,7 +125,7 @@ class InstructorDashboardHelp(BaseInstructorDashboardTest):
         Then I see help about the instructor dashboard in a new tab
         """
         href = (
-            'http://edx.readthedocs.io/projects/edx-guide-for-students/en/{}/SFD_instructor_dash_help.html'
+            'http://edx.readthedocs.io/projects/open-edx-learner-guide/en/{}/SFD_instructor_dash_help.html'
         ).format(doc_version())
         self.instructor_dashboard_page.click_help()
         assert_opened_help_link_is_correct(self, href)
