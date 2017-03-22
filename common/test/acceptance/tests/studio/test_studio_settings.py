@@ -19,7 +19,7 @@ from common.test.acceptance.pages.studio.settings_group_configurations import Gr
 from common.test.acceptance.pages.lms.courseware import CoursewarePage
 from common.test.acceptance.pages.studio.utils import get_input_value
 from textwrap import dedent
-from xmodule.partitions.partitions import Group
+from openedx.core.lib.partitions.partitions import Group
 
 
 @attr(shard=8)

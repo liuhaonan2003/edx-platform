@@ -13,13 +13,13 @@ from edxval import api
 from xmodule.modulestore.tests.factories import ItemFactory
 from xmodule.video_module import transcripts_utils
 from xmodule.modulestore.django import modulestore
-from xmodule.partitions.partitions import Group, UserPartition
 from milestones.tests.utils import MilestonesTestCaseMixin
 
 from mobile_api.models import MobileApiConfig
 from openedx.core.djangoapps.course_groups.tests.helpers import CohortFactory
 from openedx.core.djangoapps.course_groups.models import CourseUserGroupPartitionGroup
 from openedx.core.djangoapps.course_groups.cohorts import add_user_to_cohort, remove_user_from_cohort
+from openedx.core.lib.partitions.partitions import Group, UserPartition
 from mobile_api.testutils import MobileAPITestCase, MobileAuthTestMixin, MobileCourseAccessTestMixin
 
 

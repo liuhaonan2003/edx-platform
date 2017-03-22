@@ -6,14 +6,16 @@ import lxml
 from mock import Mock, patch
 from fs.memoryfs import MemoryFS
 
-from xmodule.partitions.tests.test_partitions import StaticPartitionService, PartitionTestCase, MockUserPartitionScheme
+from openedx.core.lib.partitions.partitions import Group, UserPartition
+from openedx.core.lib.partitions.tests.test_partitions import (
+    StaticPartitionService, PartitionTestCase, MockUserPartitionScheme
+)
 from xmodule.tests.xml import factories as xml
 from xmodule.tests.xml import XModuleXmlImportTest
 from xmodule.tests import get_test_system
 from xmodule.x_module import AUTHOR_VIEW, STUDENT_VIEW
 from xmodule.validation import StudioValidationMessage
 from xmodule.split_test_module import SplitTestDescriptor, SplitTestFields, get_split_user_partitions
-from xmodule.partitions.partitions import Group, UserPartition
 
 
 class SplitTestModuleFactory(xml.XmlImportFactory):

@@ -8,11 +8,11 @@ from ..partition_scheme import EnrollmentTrackPartitionScheme, EnrollmentTrackUs
 from ..models import VerifiedTrackCohortedCourse
 from course_modes.models import CourseMode
 
+from openedx.core.lib.partitions.partitions import UserPartition
 from student.models import CourseEnrollment
 from student.tests.factories import UserFactory
 from xmodule.modulestore.tests.django_utils import SharedModuleStoreTestCase
 from xmodule.modulestore.tests.factories import CourseFactory
-from xmodule.partitions.partitions import UserPartition
 
 
 class EnrollmentTrackUserPartitionTest(SharedModuleStoreTestCase):

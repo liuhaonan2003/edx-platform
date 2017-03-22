@@ -19,7 +19,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.utils.timezone import UTC
 
 from opaque_keys.edx.keys import CourseKey, UsageKey
-
+from openedx.core.lib.partitions.partitions import NoSuchUserPartitionError, NoSuchUserPartitionGroupError
 from util import milestones_helpers as milestones_helpers
 from xblock.core import XBlock
 
@@ -31,7 +31,6 @@ from xmodule.course_module import (
 from xmodule.error_module import ErrorDescriptor
 from xmodule.x_module import XModule
 from xmodule.split_test_module import get_split_user_partitions
-from xmodule.partitions.partitions import NoSuchUserPartitionError, NoSuchUserPartitionGroupError
 
 from courseware.access_response import (
     MilestoneError,

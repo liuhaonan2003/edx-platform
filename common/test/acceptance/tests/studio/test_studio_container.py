@@ -19,7 +19,7 @@ from common.test.acceptance.tests.helpers import create_user_partition_json
 import datetime
 import ddt
 from base_studio_test import ContainerBase
-from xmodule.partitions.partitions import Group
+from openedx.core.lib.partitions.partitions import Group
 
 
 class NestedVerticalTest(ContainerBase):

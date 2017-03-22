@@ -22,13 +22,13 @@ from courseware.masquerade import (
 from courseware.tests.factories import StaffFactory
 from courseware.tests.helpers import LoginEnrollmentTestCase, masquerade_as_group_member
 from courseware.tests.test_submitting_problems import ProblemSubmissionTestMixin
+from openedx.core.djangoapps.self_paced.models import SelfPacedConfiguration
+from openedx.core.lib.partitions.partitions import Group, UserPartition
 from student.tests.factories import UserFactory
 from xblock.runtime import DictKeyValueStore
 from xmodule.modulestore.django import modulestore
 from xmodule.modulestore.tests.django_utils import SharedModuleStoreTestCase
 from xmodule.modulestore.tests.factories import ItemFactory, CourseFactory
-from xmodule.partitions.partitions import Group, UserPartition
-from openedx.core.djangoapps.self_paced.models import SelfPacedConfiguration
 
 
 class MasqueradeTestCase(SharedModuleStoreTestCase, LoginEnrollmentTestCase):

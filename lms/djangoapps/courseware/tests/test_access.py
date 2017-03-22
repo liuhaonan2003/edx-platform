@@ -29,6 +29,7 @@ from courseware.tests.factories import (
 )
 from courseware.tests.helpers import LoginEnrollmentTestCase, masquerade_as_group_member
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
+from openedx.core.lib.partitions.partitions import Group, UserPartition
 from student.models import CourseEnrollment
 from student.roles import CourseCcxCoachRole, CourseStaffRole
 from student.tests.factories import (
@@ -44,7 +45,6 @@ from xmodule.course_module import (
     CATALOG_VISIBILITY_NONE,
 )
 from xmodule.error_module import ErrorDescriptor
-from xmodule.partitions.partitions import Group, UserPartition
 from xmodule.modulestore import ModuleStoreEnum
 from xmodule.modulestore.django import modulestore
 from xmodule.modulestore.tests.factories import CourseFactory, ItemFactory

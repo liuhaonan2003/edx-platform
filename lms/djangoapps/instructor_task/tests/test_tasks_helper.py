@@ -34,6 +34,7 @@ from lms.djangoapps.teams.tests.factories import CourseTeamFactory, CourseTeamMe
 from lms.djangoapps.verify_student.tests.factories import SoftwareSecurePhotoVerificationFactory
 from openedx.core.djangoapps.course_groups.models import CourseUserGroupPartitionGroup, CohortMembership
 from openedx.core.djangoapps.course_groups.tests.helpers import CohortFactory
+from openedx.core.lib.partitions.partitions import Group, UserPartition
 import openedx.core.djangoapps.user_api.course_tag.api as course_tag_api
 from openedx.core.djangoapps.user_api.partition_schemes import RandomUserPartitionScheme
 from openedx.core.djangoapps.util.testing import ContentGroupTestCase, TestConditionalContent
@@ -46,7 +47,6 @@ from student.tests.factories import CourseEnrollmentFactory, CourseModeFactory, 
 from survey.models import SurveyForm, SurveyAnswer
 from xmodule.modulestore.tests.django_utils import SharedModuleStoreTestCase
 from xmodule.modulestore.tests.factories import CourseFactory, ItemFactory
-from xmodule.partitions.partitions import Group, UserPartition
 
 from ..models import ReportStore
 from ..tasks_helper import (

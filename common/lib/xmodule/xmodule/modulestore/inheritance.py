@@ -5,7 +5,7 @@ from __future__ import absolute_import
 
 from django.conf import settings
 
-from xmodule.partitions.partitions import UserPartitionList
+from openedx.core.lib.partitions.partitions import UserPartitionList
 from xblock.fields import Scope, Boolean, String, Float, XBlockMixin, Dict, Integer
 from xblock.runtime import KeyValueStore, KvsFieldData
 from xmodule.fields import Date, Timedelta

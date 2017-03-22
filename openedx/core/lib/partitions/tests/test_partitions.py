@@ -7,11 +7,11 @@ from unittest import TestCase
 from mock import Mock
 
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
-from stevedore.extension import Extension, ExtensionManager
-from xmodule.partitions.partitions import (
+from openedx.core.lib.partitions.partitions import (
     Group, UserPartition, UserPartitionError, NoSuchUserPartitionGroupError, USER_PARTITION_SCHEME_NAMESPACE
 )
-from xmodule.partitions.partitions_service import PartitionService
+from openedx.core.lib.partitions.partitions_service import PartitionService
+from stevedore.extension import Extension, ExtensionManager
 
 
 class TestGroup(TestCase):

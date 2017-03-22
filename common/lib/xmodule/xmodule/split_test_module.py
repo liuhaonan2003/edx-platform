@@ -8,12 +8,12 @@ from webob import Response
 from uuid import uuid4
 from operator import itemgetter
 
+from openedx.core.lib.partitions.partitions import UserPartitionList
 from xmodule.progress import Progress
 from xmodule.seq_module import SequenceDescriptor
 from xmodule.studio_editable import StudioEditableModule, StudioEditableDescriptor
 from xmodule.x_module import XModule, module_attr, STUDENT_VIEW
 from xmodule.validation import StudioValidation, StudioValidationMessage
-from xmodule.partitions.partitions import UserPartitionList
 
 from lxml import etree
 

@@ -5,7 +5,7 @@ import logging
 import random
 import course_tag.api as course_tag_api
 
-from xmodule.partitions.partitions import UserPartitionError, NoSuchUserPartitionGroupError
+from openedx.core.lib.partitions.partitions import UserPartitionError, NoSuchUserPartitionGroupError
 
 log = logging.getLogger(__name__)
 
@@ -67,7 +67,7 @@ class RandomUserPartitionScheme(object):
                 }
                 # pylint: disable=fixme
                 # TODO: Use the XBlock publish api instead
-                track_function('xmodule.partitions.assigned_user_to_partition', event_info)
+                track_function('openedx.core.lib.partitions.assigned_user_to_partition', event_info)
 
         return group
 

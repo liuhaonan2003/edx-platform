@@ -8,9 +8,9 @@ from util.db import generate_int_id, MYSQL_MAX_INT
 
 from django.utils.translation import ugettext as _
 from contentstore.utils import reverse_usage_url
-from xmodule.partitions.partitions import UserPartition
-from xmodule.split_test_module import get_split_user_partitions
 from openedx.core.djangoapps.course_groups.partition_scheme import get_cohorted_user_partition
+from openedx.core.lib.partitions.partitions import UserPartition
+from xmodule.split_test_module import get_split_user_partitions
 
 MINIMUM_GROUP_ID = 100
 

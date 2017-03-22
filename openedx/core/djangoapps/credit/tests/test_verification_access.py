@@ -20,12 +20,12 @@ from openedx.core.djangoapps.credit.models import CreditCourse
 from openedx.core.djangoapps.credit.partition_schemes import VerificationPartitionScheme
 from openedx.core.djangoapps.credit.verification_access import update_verification_partitions
 from openedx.core.djangoapps.credit.signals import on_pre_publish
+from openedx.core.lib.partitions.partitions import Group, UserPartition
 from xmodule.modulestore import ModuleStoreEnum
 from xmodule.modulestore.django import SignalHandler
 from xmodule.modulestore.exceptions import ItemNotFoundError
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase, TEST_DATA_SPLIT_MODULESTORE
 from xmodule.modulestore.tests.factories import CourseFactory, ItemFactory, check_mongo_calls_range
-from xmodule.partitions.partitions import Group, UserPartition
 
 
 @attr(shard=2)

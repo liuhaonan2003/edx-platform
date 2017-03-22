@@ -12,8 +12,7 @@ from common.test.acceptance.pages.lms.courseware import CoursewarePage
 from common.test.acceptance.pages.lms.instructor_dashboard import InstructorDashboardPage
 from common.test.acceptance.pages.lms.staff_view import StaffPage
 from common.test.acceptance.fixtures.course import CourseFixture, XBlockFixtureDesc
-from bok_choy.promise import EmptyPromise
-from xmodule.partitions.partitions import Group
+from openedx.core.lib.partitions.partitions import Group
 from textwrap import dedent
 
 

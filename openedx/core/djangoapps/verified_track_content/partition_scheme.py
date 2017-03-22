@@ -10,7 +10,7 @@ from course_modes.models import CourseMode, EnrollmentMode
 from student.models import CourseEnrollment
 from opaque_keys.edx.keys import CourseKey
 from openedx.core.djangoapps.verified_track_content.models import VerifiedTrackCohortedCourse
-from xmodule.partitions.partitions import NoSuchUserPartitionGroupError, Group, UserPartition
+from openedx.core.lib.partitions.partitions import NoSuchUserPartitionGroupError, Group, UserPartition
 
 
 # EnrollmentMode IDs will be low integers (starting at 0), which is important so that they

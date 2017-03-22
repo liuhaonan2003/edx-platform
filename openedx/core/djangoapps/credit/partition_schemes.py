@@ -18,8 +18,8 @@ import logging
 from django.core.cache import cache
 
 from lms.djangoapps.verify_student.models import SkippedReverification, VerificationStatus
+from openedx.core.lib.partitions.partitions import NoSuchUserPartitionGroupError
 from student.models import CourseEnrollment
-from xmodule.partitions.partitions import NoSuchUserPartitionGroupError
 
 
 log = logging.getLogger(__name__)

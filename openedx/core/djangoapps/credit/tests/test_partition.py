@@ -13,9 +13,9 @@ from lms.djangoapps.verify_student.models import (
 )
 from openedx.core.djangoapps.credit.partition_schemes import VerificationPartitionScheme
 from openedx.core.djangolib.testing.utils import skip_unless_lms
+from openedx.core.lib.partitions.partitions import UserPartition, Group
 from student.models import CourseEnrollment
 from student.tests.factories import UserFactory
-from xmodule.partitions.partitions import UserPartition, Group
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
 from xmodule.modulestore.tests.factories import CourseFactory
 

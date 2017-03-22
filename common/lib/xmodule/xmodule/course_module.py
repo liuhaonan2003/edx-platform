@@ -13,11 +13,11 @@ from path import Path as path
 from pytz import utc
 from xblock.fields import Scope, List, String, Dict, Boolean, Integer, Float
 
+from openedx.core.lib.partitions.partitions import UserPartition, UserPartitionError, UserPartitionList
 from xmodule import course_metadata_utils
 from xmodule.course_metadata_utils import DEFAULT_START_DATE
 from xmodule.graders import grader_from_conf
 from xmodule.mixin import LicenseMixin
-from xmodule.partitions.partitions import UserPartition, UserPartitionError, UserPartitionList
 from xmodule.seq_module import SequenceDescriptor, SequenceModule
 from xmodule.tabs import CourseTabList, InvalidTabsException
 from .fields import Date

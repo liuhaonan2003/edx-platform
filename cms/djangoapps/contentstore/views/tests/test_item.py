@@ -27,6 +27,9 @@ from contentstore.views.item import (
 from contentstore.tests.utils import CourseTestCase
 from student.tests.factories import UserFactory
 from xblock_django.models import XBlockConfiguration, XBlockStudioConfiguration, XBlockStudioConfigurationFlag
+from opaque_keys.edx.keys import UsageKey, CourseKey
+from opaque_keys.edx.locations import Location
+from openedx.core.lib.partitions.partitions import Group, UserPartition
 from xmodule.capa_module import CapaDescriptor
 from xmodule.modulestore import ModuleStoreEnum
 from xmodule.modulestore.django import modulestore
@@ -41,9 +44,6 @@ from xblock.runtime import DictKeyValueStore, KvsFieldData
 from xblock.test.tools import TestRuntime
 from xblock.exceptions import NoSuchHandlerError
 from xblock_django.user_service import DjangoXBlockUserService
-from opaque_keys.edx.keys import UsageKey, CourseKey
-from opaque_keys.edx.locations import Location
-from xmodule.partitions.partitions import Group, UserPartition
 
 
 class AsideTest(XBlockAside):

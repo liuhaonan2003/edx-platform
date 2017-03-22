@@ -16,6 +16,7 @@ from django.conf import settings
 
 from course_modes.models import CourseMode
 from openedx.core.djangoapps.models.course_details import CourseDetails
+from openedx.core.lib.partitions.partitions import UserPartition
 from xmodule.library_tools import normalize_key_for_search
 from xmodule.modulestore import ModuleStoreEnum
 from xmodule.modulestore.django import SignalHandler, modulestore
@@ -34,7 +35,6 @@ from xmodule.modulestore.tests.utils import (
 )
 from xmodule.tests import DATA_DIR
 from xmodule.x_module import XModuleMixin
-from xmodule.partitions.partitions import UserPartition
 
 from search.search_engine_base import SearchEngine
 

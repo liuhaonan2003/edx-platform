@@ -10,12 +10,12 @@ from pytz import utc
 from stevedore.extension import Extension, ExtensionManager
 from xblock.runtime import KvsFieldData, DictKeyValueStore
 
-import xmodule.course_module
-from xmodule.modulestore.xml import ImportSystem, XMLModuleStore
-from xmodule.partitions.partitions import (
+from opaque_keys.edx.locations import SlashSeparatedCourseKey
+from openedx.core.lib.partitions.partitions import (
     UserPartition, USER_PARTITION_SCHEME_NAMESPACE
 )
-from opaque_keys.edx.locations import SlashSeparatedCourseKey
+import xmodule.course_module
+from xmodule.modulestore.xml import ImportSystem, XMLModuleStore
 
 
 ORG = 'test_org'

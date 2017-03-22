@@ -7,11 +7,11 @@ from nose.plugins.attrib import attr
 
 from courseware.module_render import get_module_for_descriptor
 from courseware.model_data import FieldDataCache
+from openedx.core.djangoapps.user_api.tests.factories import UserCourseTagFactory
+from openedx.core.lib.partitions.partitions import Group, UserPartition
 from student.tests.factories import UserFactory, CourseEnrollmentFactory
 from xmodule.modulestore.tests.factories import ItemFactory, CourseFactory
 from xmodule.modulestore.tests.django_utils import SharedModuleStoreTestCase
-from xmodule.partitions.partitions import Group, UserPartition
-from openedx.core.djangoapps.user_api.tests.factories import UserCourseTagFactory
 
 
 @attr(shard=1)
