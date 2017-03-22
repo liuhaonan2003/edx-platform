@@ -13,7 +13,6 @@ from path import Path as path
 from pytz import utc
 from xblock.fields import Scope, List, String, Dict, Boolean, Integer, Float
 
-from openedx.core.lib.partitions.partitions import UserPartition, UserPartitionError, UserPartitionList
 from xmodule import course_metadata_utils
 from xmodule.course_metadata_utils import DEFAULT_START_DATE
 from xmodule.graders import grader_from_conf
@@ -825,13 +824,6 @@ class CourseFields(object):
         scope=Scope.settings
     )
 
-    user_partitions = UserPartitionList(
-        display_name=_("Group Configurations"),
-        help=_("Enter the configurations that govern how students are grouped together."),
-        default=[],
-        scope=Scope.settings
-    )
-
     """
     instructor_info dict structure:
     {
@@ -917,8 +909,6 @@ class CourseDescriptor(CourseFields, SequenceDescriptor, LicenseMixin):
         if self.discussion_topics == {}:
             self.discussion_topics = {_('General'): {'id': self.location.html_id()}}
 
-        self.set_default_user_partition()
-
         try:
             if not getattr(self, "tabs", []):
                 CourseTabList.initialize_default(self)
@@ -970,56 +960,6 @@ class CourseDescriptor(CourseFields, SequenceDescriptor, LicenseMixin):
                 log.warning(msg)
 
         return policy_str
-
-    def set_default_user_partition(self):
-        """
-        Ensure that an enrollment_track partition exists on the course.
-        """
-        try:
-            enrollment_track_scheme = UserPartition.get_scheme("enrollment_track")
-        except UserPartitionError:
-            log.warning(
-                "No 'enrollment_track' scheme registered, EnrollmentTrackUserPartition will not be created."
-            )
-            return
-
-        enrollment_track_partitions = [p for p in self.user_partitions if p.scheme == enrollment_track_scheme]
-
-        # TODO: do not store course_id in the partition (as it would be persisted in to_json)--
-        # will be changing this as part of responding to PR review feedback.
-        # Note that when a course_module is initially created, the ID is the draft version.
-        # We just want to store the course_id without published or draft.
-        course_id = unicode(self.id.for_branch(None))
-        create_partition = False
-        new_id = 0
-
-        if len(enrollment_track_partitions) == 0:
-            used_ids = set(p.id for p in self.user_partitions)
-            while new_id in used_ids:
-                new_id += 1
-            create_partition = True
-        elif enrollment_track_partitions[0].parameters["course_id"] != course_id:
-            # With older courses, the first time through this code we may end up storing
-            # the "old mongo" version of the course key. If so, update it to the new version.
-            self.user_partitions.remove(enrollment_track_partitions[0])
-            new_id = enrollment_track_partitions[0].id
-            create_partition = True
-
-        if create_partition:
-            partition = enrollment_track_scheme.create_user_partition(
-                id=new_id,
-                name=_(u"Enrollment Track Partition"),
-                description=_(u"Partition for segmenting users by enrollment track"),
-                parameters={"course_id": course_id}
-            )
-            self.user_partitions.append(partition)
-
-        if len(enrollment_track_partitions) > 1:
-            log.warning(
-                "Multiple EnrollmentTrackUserPartitions found for course {course_id}".format(
-                    course_id=unicode(self.id)
-                )
-            )
 
     @classmethod
     def from_xml(cls, xml_data, system, id_generator):

@@ -4,8 +4,16 @@ user partitions.  It uses the user_service key/value store provided by the LMS r
 persist the assignments.
 """
 from abc import ABCMeta, abstractproperty
+from django.utils.translation import ugettext as _
+import logging
 
-from openedx.core.lib.partitions.partitions import NoSuchUserPartitionError
+from openedx.core.lib.partitions.partitions import NoSuchUserPartitionError, UserPartition, UserPartitionError
+
+
+log = logging.getLogger(__name__)
+
+
+ENROLLMENT_TRACK_PARTITION_ID = 50
 
 
 def get_course_user_partitions(course):
@@ -14,12 +22,46 @@ def get_course_user_partitions(course):
     This will include the ones defined in course.user_partitions, but it may also
     include dynamically included partitions (such as the `EnrollmentTrackUserPartition`).
     """
-    # TODO: add dynamic partition here.
-    return course.user_partitions
+    return course.user_partitions + get_dynamic_partitions(course)
 
 
-def get_dynamic_user_partition(course_key, partition_id):
-    raise NoSuchUserPartitionError('No dynamic user partitions yet')
+def get_dynamic_user_partition(course, user_partition_id):
+    partition = _get_partition_from_id(get_dynamic_partitions(course), user_partition_id)
+    if not partition:
+        raise NoSuchUserPartitionError('No dynamic partition found for ID {id}'.format(user_partition_id))
+    return partition
+    raise NoSuchUserPartitionError('No dynamic partition found for ID {id}'.format(user_partition_id))
+
+
+def get_dynamic_partitions(course):
+    return [create_enrollment_track_partition(course)]
+
+
+def create_enrollment_track_partition(course):
+    try:
+        enrollment_track_scheme = UserPartition.get_scheme("enrollment_track")
+    except UserPartitionError:
+        log.warning("No 'enrollment_track' scheme registered, EnrollmentTrackUserPartition will not be created.")
+        return
+
+    used_ids = set(p.id for p in course.user_partitions)
+    if ENROLLMENT_TRACK_PARTITION_ID in used_ids:
+        log.warning("Cannot add 'enrollment_track' partition, as ID {id} is assigned to {partition}".format(
+            id=ENROLLMENT_TRACK_PARTITION_ID,
+            partition=_get_partition_from_id(course.user_partitions, ENROLLMENT_TRACK_PARTITION_ID).name)
+        )
+        return
+
+    # TODO: can for_branch(None) be removed?
+    course_id = unicode(course.id.for_branch(None))
+
+    partition = enrollment_track_scheme.create_user_partition(
+        id=ENROLLMENT_TRACK_PARTITION_ID,
+        name=_(u"Enrollment Track Partition"),
+        description=_(u"Partition for segmenting users by enrollment track"),
+        parameters={"course_id": course_id}
+    )
+    return partition
 
 
 class PartitionService(object):
@@ -93,11 +135,7 @@ class PartitionService(object):
         Returns:
             A UserPartition, or None if not found.
         """
-        for partition in self.course_partitions:
-            if partition.id == user_partition_id:
-                return partition
-
-        return None
+        return _get_partition_from_id(self.course_partitions, user_partition_id)
 
     def get_group(self, user_partition, assign=True):
         """
@@ -108,3 +146,17 @@ class PartitionService(object):
         return user_partition.scheme.get_group_for_user(
             self._course_id, self._user, user_partition, assign=assign, track_function=self._track_function
         )
+
+
+def _get_partition_from_id(partitions, user_partition_id):
+    """
+    Look for a user partition with a matching id in the provided list of partitions.
+
+    Returns:
+        A UserPartition, or None if not found.
+    """
+    for partition in partitions:
+        if partition.id == user_partition_id:
+            return partition
+
+    return None
