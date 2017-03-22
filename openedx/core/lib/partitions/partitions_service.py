@@ -30,7 +30,6 @@ def get_dynamic_user_partition(course, user_partition_id):
     if not partition:
         raise NoSuchUserPartitionError('No dynamic partition found for ID {id}'.format(user_partition_id))
     return partition
-    raise NoSuchUserPartitionError('No dynamic partition found for ID {id}'.format(user_partition_id))
 
 
 def get_dynamic_partitions(course):

@@ -151,7 +151,9 @@ class LmsBlockMixin(XBlockMixin):
                 user_partition = self._get_user_partition(user_partition_id)
             except NoSuchUserPartitionError:
                 try:
-                    user_partition = get_dynamic_user_partition(self.runtime.course_id, user_partition_id)
+                    user_partition = get_dynamic_user_partition(
+                        self.runtime.modulestore.get_course(self.runtime.course_id), user_partition_id
+                    )
                 except NoSuchUserPartitionError:
                     has_invalid_user_partitions = True
             else:
