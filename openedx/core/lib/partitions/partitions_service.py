@@ -5,6 +5,22 @@ persist the assignments.
 """
 from abc import ABCMeta, abstractproperty
 
+from openedx.core.lib.partitions.partitions import NoSuchUserPartitionError
+
+
+def get_course_user_partitions(course):
+    """
+    A method that returns all `UserPartitions` associated with a course, as a List.
+    This will include the ones defined in course.user_partitions, but it may also
+    include dynamically included partitions (such as the `EnrollmentTrackUserPartition`).
+    """
+    # TODO: add dynamic partition here.
+    return course.user_partitions
+
+
+def get_dynamic_user_partition(course_key, partition_id):
+    raise NoSuchUserPartitionError('No dynamic user partitions yet')
+
 
 class PartitionService(object):
     """

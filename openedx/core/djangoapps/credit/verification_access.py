@@ -23,6 +23,7 @@ import logging
 from util.db import generate_int_id
 from openedx.core.djangoapps.credit.utils import get_course_blocks
 from openedx.core.lib.partitions.partitions import Group, UserPartition
+from openedx.core.lib.partitions.partitions_service import get_course_user_partitions
 from xmodule.modulestore.django import modulestore
 from xmodule.modulestore import ModuleStoreEnum
 
@@ -68,7 +69,7 @@ def _unique_partition_id(course):
     # Exclude all previously used IDs, even for partitions that have been disabled
     # (e.g. if the course author deleted an in-course reverifification block but
     # there are courseware components that reference the disabled partition).
-    used_ids = set(p.id for p in course.user_partitions)
+    used_ids = set(p.id for p in get_course_user_partitions(course))
     return generate_int_id(used_ids=used_ids)
 
 
@@ -141,7 +142,7 @@ def _set_verification_partitions(course_key, icrv_blocks):
         log.error("Could not find course %s", course_key)
         return []
 
-    verified_partitions = course.get_user_partitions_for_scheme(scheme)
+    verified_partitions = [p for p in course.user_partitions if p.scheme == scheme]
     partition_id_for_location = {
         p.parameters["location"]: p.id
         for p in verified_partitions
