@@ -8,7 +8,7 @@ from fs.memoryfs import MemoryFS
 
 from openedx.core.lib.partitions.partitions import Group, UserPartition
 from openedx.core.lib.partitions.tests.test_partitions import (
-    StaticPartitionService, PartitionTestCase, MockUserPartitionScheme
+    MockPartitionService, PartitionTestCase, MockUserPartitionScheme
 )
 from xmodule.tests.xml import factories as xml
 from xmodule.tests.xml import XModuleXmlImportTest
@@ -84,15 +84,17 @@ class SplitTestModuleTest(XModuleXmlImportTest, PartitionTestCase):
         self.course.runtime.export_fs = MemoryFS()
 
         user = Mock(username='ma', email='ma@edx.org', is_staff=False, is_active=True)
-        self.partitions_service = StaticPartitionService(
-            [
-                self.user_partition,
-                UserPartition(
-                    1, 'second_partition', 'Second Partition',
-                    [Group("0", 'abel'), Group("1", 'baker'), Group("2", 'charlie')],
-                    MockUserPartitionScheme()
-                )
-            ],
+
+        self.course.user_partitions = [
+            self.user_partition,
+            UserPartition(
+                1, 'second_partition', 'Second Partition',
+                [Group("0", 'abel'), Group("1", 'baker'), Group("2", 'charlie')],
+                MockUserPartitionScheme()
+            )
+        ]
+        self.partitions_service = MockPartitionService(
+            self.course,
             user=user,
             course_id=self.course.id,
             track_function=Mock(name='track_function'),

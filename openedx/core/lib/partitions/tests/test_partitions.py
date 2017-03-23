@@ -394,12 +394,12 @@ class TestUserPartition(PartitionTestCase):
         self.assertEqual(partition.name, self.TEST_NAME)
 
 
-class StaticPartitionService(PartitionService):
+class MockPartitionService(PartitionService):
     """
     Mock PartitionService for testing.
     """
     def __init__(self, course, **kwargs):
-        super(StaticPartitionService, self).__init__(**kwargs)
+        super(MockPartitionService, self).__init__(**kwargs)
         self._course = course
 
     def get_course(self):
@@ -417,13 +417,13 @@ class TestPartitionService(PartitionTestCase):
         self.partition_service = self._create_service("ma")
 
     def _create_service(self, username, cache=None):
-        """Convenience method to generate a StaticPartitionService for a user."""
+        """Convenience method to generate a MockPartitionService for a user."""
         # Derive a "user_id" from the username, just so we don't have to add an
         # extra param to this method. Just has to be unique per user.
         user_id = abs(hash(username))
         self.course.user_partitions = [self.user_partition]
 
-        return StaticPartitionService(
+        return MockPartitionService(
             self.course,
             user=Mock(
                 username=username, email='{}@edx.org'.format(username), is_staff=False, is_active=True, id=user_id
@@ -453,14 +453,14 @@ class TestPartitionService(PartitionTestCase):
         user_partition_id = self.user_partition.id
         shared_cache = {}
 
-        # Two StaticPartitionService objects that share the same cache:
+        # Two MockPartitionService objects that share the same cache:
         ps_shared_cache_1 = self._create_service(username, shared_cache)
         ps_shared_cache_2 = self._create_service(username, shared_cache)
 
-        # A StaticPartitionService with its own local cache
+        # A MockPartitionService with its own local cache
         ps_diff_cache = self._create_service(username, {})
 
-        # A StaticPartitionService that never uses caching.
+        # A MockPartitionService that never uses caching.
         ps_uncached = self._create_service(username)
 
         # Set the group we expect users to be placed into
