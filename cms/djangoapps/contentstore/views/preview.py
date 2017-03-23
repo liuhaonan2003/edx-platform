@@ -221,16 +221,18 @@ def _preview_module_system(request, descriptor, field_data):
 
 class PreviewPartitionService(PartitionService):
     """
-    Another runtime mixin that provides access to the student partitions defined on the
-    course.
-
-    (If and when XBlock directly provides access from one block (e.g. a split_test_module)
-    to another (e.g. a course_module), this won't be necessary, but for now it seems like
-    the least messy way to hook things through)
-
+    A runtime mixin to allow the display and editing of visibility based on user partitions.
     """
     def get_course(self):
         return modulestore().get_course(self._course_id)
+
+    def get_user_group_id_for_partition(self, user_partition_id):
+        """
+        Override this method to return None, as the split_test_module calls this
+        to determine which group a user should see, but is robust to getting a return
+        value of None meaning that all groups should be shown.
+        """
+        return None
 
 
 def _load_preview_module(request, descriptor):
