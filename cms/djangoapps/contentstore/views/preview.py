@@ -9,6 +9,7 @@ from django.http import Http404, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 from edxmako.shortcuts import render_to_string
 
+from openedx.core.lib.partitions.partitions_service import PartitionService
 from openedx.core.lib.xblock_utils import (
     replace_static_urls, wrap_xblock, wrap_fragment, wrap_xblock_aside, request_token, xblock_local_resource_url,
 )
@@ -213,8 +214,23 @@ def _preview_module_system(request, descriptor, field_data):
             "i18n": ModuleI18nService,
             "settings": SettingsService(),
             "user": DjangoXBlockUserService(request.user),
+            "partitions": PreviewPartitionService(user=request.user, course_id=course_id)
         },
     )
+
+
+class PreviewPartitionService(PartitionService):
+    """
+    Another runtime mixin that provides access to the student partitions defined on the
+    course.
+
+    (If and when XBlock directly provides access from one block (e.g. a split_test_module)
+    to another (e.g. a course_module), this won't be necessary, but for now it seems like
+    the least messy way to hook things through)
+
+    """
+    def get_course(self):
+        return modulestore().get_course(self._course_id)
 
 
 def _load_preview_module(request, descriptor):
