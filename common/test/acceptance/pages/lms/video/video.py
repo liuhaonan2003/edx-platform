@@ -204,7 +204,7 @@ class VideoPage(PageObject):
         Check that if video is rendered in `mode`.
 
         Arguments:
-            mode (str): Video mode, `html5` or `youtube`.
+            mode (str): Video mode, one of `html5`, `youtube`, `hls`.
 
         Returns:
             bool: Tells if video is rendered in `mode`.
@@ -222,9 +222,23 @@ class VideoPage(PageObject):
 
             """
             is_present = self.q(css=selector).present
+            # TODO! Better hls source url detection. Currently this is workaround
+            # becuase in hls video src attribute is not set to original url
+            # http://www.streambox.fr/playlists/x36xhzz/x36xhzz.m3u8 becomes
+            # "blob:https://studio-hlsvideo.sandbox.edx.org/0e2e72e0-904e-d946-9ce0-06c542894cda"
+            if mode == 'hls':
+                is_present = self.q(css=selector.attrs('src')[0].startswith('blob:')
             return is_present, is_present
 
         return Promise(_is_element_present, 'Video Rendering Failed in {0} mode.'.format(mode)).fulfill()
+
+    @property
+    def video_download_url(self):
+        """
+        Return video download url or None
+        """
+        browser_query = self.q(css='.wrapper-download-video .btn-link.video-sources')
+        return browser_query.attrs('href')[0] if browser_query.present else None
 
     @property
     def is_autoplay_enabled(self):
