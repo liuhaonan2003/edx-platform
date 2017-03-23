@@ -90,10 +90,8 @@ class LmsPartitionService(PartitionService):
     the least messy way to hook things through)
 
     """
-    @property
-    def course_partitions(self):
-        course = modulestore().get_course(self._course_id)
-        return course.user_partitions
+    def get_course(self):
+        return modulestore().get_course(self._course_id)
 
 
 class UserTagsService(object):

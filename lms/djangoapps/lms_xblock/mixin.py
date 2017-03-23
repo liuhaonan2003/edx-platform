@@ -6,7 +6,7 @@ Namespace that defines fields common to all blocks used in the LMS
 from lazy import lazy
 
 from openedx.core.lib.partitions.partitions import NoSuchUserPartitionError, NoSuchUserPartitionGroupError
-from openedx.core.lib.partitions.partitions_service import get_dynamic_user_partition
+from xblock.core import XBlock
 from xblock.fields import Boolean, Scope, String, XBlockMixin, Dict
 from xblock.validation import ValidationMessage
 from xmodule.modulestore.inheritance import UserPartitionList
@@ -27,6 +27,7 @@ class GroupAccessDict(Dict):
             return {unicode(k): access_dict[k] for k in access_dict}
 
 
+@XBlock.wants('partitions')
 class LmsBlockMixin(XBlockMixin):
     """
     Mixin that defines fields common to all blocks used in the LMS
@@ -132,7 +133,7 @@ class LmsBlockMixin(XBlockMixin):
         Returns the user partition with the specified id.  Raises
         `NoSuchUserPartitionError` if the lookup fails.
         """
-        for user_partition in self.user_partitions:
+        for user_partition in self.runtime.service(self, 'partitions').course_partitions:
             if user_partition.id == user_partition_id:
                 return user_partition
 
@@ -150,12 +151,7 @@ class LmsBlockMixin(XBlockMixin):
             try:
                 user_partition = self._get_user_partition(user_partition_id)
             except NoSuchUserPartitionError:
-                try:
-                    user_partition = get_dynamic_user_partition(
-                        self.runtime.modulestore.get_course(self.runtime.course_id), user_partition_id
-                    )
-                except NoSuchUserPartitionError:
-                    has_invalid_user_partitions = True
+                has_invalid_user_partitions = True
             else:
                 # Skip the validation check if the partition has been disabled
                 if user_partition.active:

@@ -20,7 +20,6 @@ from django.utils.timezone import UTC
 
 from opaque_keys.edx.keys import CourseKey, UsageKey
 from openedx.core.lib.partitions.partitions import NoSuchUserPartitionError, NoSuchUserPartitionGroupError
-from openedx.core.lib.partitions.partitions_service import get_dynamic_user_partition
 from util import milestones_helpers as milestones_helpers
 from xblock.core import XBlock
 
@@ -486,14 +485,7 @@ def _has_group_access(descriptor, user, course_key):
     partitions = []
     for partition_id, group_ids in merged_access.items():
         try:
-            try:
-                partition = descriptor._get_user_partition(partition_id)  # pylint: disable=protected-access
-            except NoSuchUserPartitionError:
-                # Check course-level, dynamic partitions
-                partition = get_dynamic_user_partition(
-                    descriptor.runtime.modulestore.get_course(course_key), partition_id
-                )
-
+            partition = descriptor._get_user_partition(partition_id)  # pylint: disable=protected-access
             if partition.active:
                 if group_ids is not None:
                     partitions.append(partition)

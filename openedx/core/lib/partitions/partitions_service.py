@@ -3,7 +3,7 @@ This is a service-like API that assigns tracks which groups users are in for var
 user partitions.  It uses the user_service key/value store provided by the LMS runtime to
 persist the assignments.
 """
-from abc import ABCMeta, abstractproperty
+from abc import ABCMeta, abstractmethod
 from django.utils.translation import ugettext as _
 import logging
 
@@ -22,21 +22,14 @@ def get_course_user_partitions(course):
     This will include the ones defined in course.user_partitions, but it may also
     include dynamically included partitions (such as the `EnrollmentTrackUserPartition`).
     """
-    return course.user_partitions + get_dynamic_partitions(course)
+    return course.user_partitions + _get_dynamic_partitions(course)
 
 
-def get_dynamic_user_partition(course, user_partition_id):
-    partition = _get_partition_from_id(get_dynamic_partitions(course), user_partition_id)
-    if not partition:
-        raise NoSuchUserPartitionError('No dynamic partition found for ID {id}'.format(user_partition_id))
-    return partition
+def _get_dynamic_partitions(course):
+    return [_create_enrollment_track_partition(course)]
 
 
-def get_dynamic_partitions(course):
-    return [create_enrollment_track_partition(course)]
-
-
-def create_enrollment_track_partition(course):
+def _create_enrollment_track_partition(course):
     try:
         enrollment_track_scheme = UserPartition.get_scheme("enrollment_track")
     except UserPartitionError:
@@ -71,12 +64,16 @@ class PartitionService(object):
     """
     __metaclass__ = ABCMeta
 
-    @abstractproperty
+    @abstractmethod
+    def get_course(self):
+        raise NotImplementedError('Subclasses must implement get_course')
+
+    @property
     def course_partitions(self):
         """
         Return the set of partitions assigned to self._course_id
         """
-        raise NotImplementedError('Subclasses must implement course_partition')
+        return get_course_user_partitions(self.get_course())
 
     def __init__(self, user, course_id, track_function=None, cache=None):
         self._user = user
