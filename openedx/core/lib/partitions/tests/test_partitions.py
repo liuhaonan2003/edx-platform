@@ -398,13 +398,12 @@ class StaticPartitionService(PartitionService):
     """
     Mock PartitionService for testing.
     """
-    def __init__(self, partitions, **kwargs):
+    def __init__(self, course, **kwargs):
         super(StaticPartitionService, self).__init__(**kwargs)
-        self._partitions = partitions
+        self._course = course
 
-    @property
-    def course_partitions(self):
-        return self._partitions
+    def get_course(self):
+        return self._course
 
 
 class TestPartitionService(PartitionTestCase):
@@ -422,9 +421,10 @@ class TestPartitionService(PartitionTestCase):
         # Derive a "user_id" from the username, just so we don't have to add an
         # extra param to this method. Just has to be unique per user.
         user_id = abs(hash(username))
+        self.course.user_partitions = [self.user_partition]
 
         return StaticPartitionService(
-            [self.user_partition],
+            self.course,
             user=Mock(
                 username=username, email='{}@edx.org'.format(username), is_staff=False, is_active=True, id=user_id
             ),
