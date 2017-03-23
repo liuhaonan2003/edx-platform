@@ -365,7 +365,7 @@ class GetItemTest(ItemTest):
         result = json.loads(resp.content)
         self.assertEqual(result["user_partitions"], [
             {
-                "id": 0,
+                "id": 50,
                 "name": "Enrollment Track Partition",
                 "scheme": "enrollment_track",
                 "groups": [
