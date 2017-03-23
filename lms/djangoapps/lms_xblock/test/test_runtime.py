@@ -287,3 +287,6 @@ class TestI18nService(ModuleStoreTestCase):
         Test: i18n service should not be callable in LMS after initialization.
         """
         self.assertFalse(callable(self.runtime.service(self.mock_block, 'i18n')))
+
+
+# TODO: add a unit test that the partitions service is registered.

@@ -7,7 +7,7 @@ from abc import ABCMeta, abstractmethod
 from django.utils.translation import ugettext as _
 import logging
 
-from openedx.core.lib.partitions.partitions import NoSuchUserPartitionError, UserPartition, UserPartitionError
+from openedx.core.lib.partitions.partitions import UserPartition, UserPartitionError
 
 
 log = logging.getLogger(__name__)
